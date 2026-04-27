@@ -18,7 +18,7 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    orderItem: [orderItemSchema],
+    orderItems: [orderItemSchema],
 
     totalPrice: {
       type: Number,
@@ -33,6 +33,10 @@ const orderSchema = new mongoose.Schema(
     isDelivered: {
       type: Boolean,
       default: false,
+    },
+
+    paymentReference: {
+      type: String,
     },
   },
   { timestamps: true },

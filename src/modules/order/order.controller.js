@@ -3,7 +3,10 @@ import Order from "../../models/Order.js";
 
 // create order from cart
 export const createOrder = async (req, res) => {
-  const cart = await Cart.findOne({ user: req.user._id });
+  const cart = await Cart.findOne({ user: req.user._id }).populate(
+    "items.product",
+    "name price",
+  );
 
   if (!cart || cart.items.length === 0) {
     return res.status(400).json({ message: "Cart is empty" });
@@ -11,12 +14,12 @@ export const createOrder = async (req, res) => {
 
   // calculate total price
   const totalPrice = cart.items.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
+    return acc + item.product.price * item.quantity;
   }, 0);
 
   const order = new Order({
     user: req.user._id,
-    orderItem: cart.items,
+    orderItems: cart.items,
     totalPrice,
   });
 
